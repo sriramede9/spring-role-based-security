@@ -33,10 +33,10 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/","index.html","/css","/js/**").permitAll()
 		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
-		.antMatchers(HttpMethod.GET,"/management/**").hasRole(ApplicationUserRole.ADMINTRAINEE.name())
-		.antMatchers(HttpMethod.POST,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
-		.antMatchers(HttpMethod.PUT,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
-		.antMatchers(HttpMethod.DELETE,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
+		.antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
+		.antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
+		.antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
+		.antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(),ApplicationUserRole.ADMINTRAINEE.name())
 		.anyRequest()
 		.authenticated()
 		.and()
@@ -50,19 +50,22 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		UserDetails annaSmithUser = User.builder()
 		.username("annasmith")
 		.password(passwordEncoder.encode("password"))
-		.roles(STUDENT.name())
+//		.roles(STUDENT.name())
+		.authorities(STUDENT.getGrantedAuthorities())
 		.build();
 		
 		UserDetails lindaUser = User.builder()
 				.username("linda")
 				.password(passwordEncoder.encode("password123"))
-				.roles(ADMIN.name())
+//				.roles(ADMIN.name())
+				.authorities(ADMIN.getGrantedAuthorities())
 				.build();
 		
 		UserDetails tomUser = User.builder()
 				.username("tom")
 				.password(passwordEncoder.encode("password123"))
-				.roles(ADMINTRAINEE.name())
+//				.roles(ADMINTRAINEE.name())
+				.authorities(ADMINTRAINEE.getGrantedAuthorities())
 				.build();
 		
 		return new InMemoryUserDetailsManager(annaSmithUser,lindaUser,tomUser);
