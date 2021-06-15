@@ -21,3 +21,19 @@ http
 		.and()
 		.httpBasic();
 `
+
+## Add  custom user and roles
+`
+	@Override
+	@Bean
+	protected UserDetailsService userDetailsService() {
+
+		UserDetails annaSmithUser = User.builder()
+		.username("annasmith")
+		.password(passwordEncoder.encode("password"))
+		.roles("STUDENT")
+		.build();
+		
+		return new InMemoryUserDetailsManager(annaSmithUser);
+	}
+`
