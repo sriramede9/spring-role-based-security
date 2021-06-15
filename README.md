@@ -50,3 +50,20 @@ http
 		.and()
 		.httpBasic();
 `
+
+## Separate API requests based on Roles [who can post and who can only read]
+
+`
+	http
+		.authorizeRequests()
+		.antMatchers("/","index.html","/css","/js/**").permitAll()
+		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
+		.antMatchers(HttpMethod.GET,"/management/**").hasRole(ApplicationUserRole.ADMINTRAINEE.name())
+		.antMatchers(HttpMethod.POST,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
+		.antMatchers(HttpMethod.PUT,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
+		.antMatchers(HttpMethod.DELETE,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
+		.anyRequest()
+		.authenticated()
+		.and()
+		.httpBasic();
+`
