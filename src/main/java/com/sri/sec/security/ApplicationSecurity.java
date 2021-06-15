@@ -3,6 +3,7 @@ package com.sri.sec.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -32,6 +33,10 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()
 		.antMatchers("/","index.html","/css","/js/**").permitAll()
 		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
+		.antMatchers(HttpMethod.GET,"/management/**").hasRole(ApplicationUserRole.ADMINTRAINEE.name())
+		.antMatchers(HttpMethod.POST,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
+		.antMatchers(HttpMethod.PUT,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
+		.antMatchers(HttpMethod.DELETE,"/management/**").hasRole(ApplicationUserRole.ADMIN.name())
 		.anyRequest()
 		.authenticated()
 		.and()
@@ -54,7 +59,13 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 				.roles(ADMIN.name())
 				.build();
 		
-		return new InMemoryUserDetailsManager(annaSmithUser,lindaUser);
+		UserDetails tomUser = User.builder()
+				.username("tom")
+				.password(passwordEncoder.encode("password123"))
+				.roles(ADMINTRAINEE.name())
+				.build();
+		
+		return new InMemoryUserDetailsManager(annaSmithUser,lindaUser,tomUser);
 	}
 	
 	
