@@ -37,3 +37,16 @@ http
 		return new InMemoryUserDetailsManager(annaSmithUser);
 	}
 `
+
+## Add roles of type ENUM with Permissions
+
+`
+	http
+		.authorizeRequests()
+		.antMatchers("/","index.html","/css","/js/**").permitAll()
+		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
+		.anyRequest()
+		.authenticated()
+		.and()
+		.httpBasic();
+`
