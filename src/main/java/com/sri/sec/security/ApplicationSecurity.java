@@ -38,7 +38,17 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		.and()
 		.formLogin()
 		.loginPage("/login")
-		.defaultSuccessUrl("/courses");
+		.defaultSuccessUrl("/courses")
+		.and()
+		.rememberMe() //default two weeks
+		
+		.and()
+		.logout()
+		.logoutUrl("/logout")
+		.clearAuthentication(true)
+		.invalidateHttpSession(true)
+		.deleteCookies("JSESSIONID","remember-me")
+		.logoutSuccessUrl("/login");
 	}
 
 	@Override
