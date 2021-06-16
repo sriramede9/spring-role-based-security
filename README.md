@@ -127,3 +127,14 @@ public class StudentManagementController {
 		.and()
 		.httpBasic();
 `
+## form based auth
+
+`
+	http
+		.authorizeRequests()
+		.antMatchers("/","index.html","/css","/js/**").permitAll()
+		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
+.anyRequest()
+		.authenticated()
+		.and()
+		.formLogin();`
