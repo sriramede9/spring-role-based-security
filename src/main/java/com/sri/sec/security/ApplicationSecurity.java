@@ -31,18 +31,14 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		
 		http
 		.authorizeRequests()
-		.antMatchers("/","index.html","/css","/js/**").permitAll()
+		.antMatchers("/","index.html","/login","/css","/js/**").permitAll()
 		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
-//		.antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-//		.antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-//		.antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(ApplicationUserPermission.COURSE_WRITE.getPermission())
-//		.antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(),ApplicationUserRole.ADMINTRAINEE.name())
 		.anyRequest()
 		.authenticated()
-//		.and()
-//		.httpBasic()
 		.and()
-		.formLogin();
+		.formLogin()
+		.loginPage("/login")
+		.defaultSuccessUrl("/courses");
 	}
 
 	@Override
