@@ -39,8 +39,10 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 //		.antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ApplicationUserRole.ADMIN.name(),ApplicationUserRole.ADMINTRAINEE.name())
 		.anyRequest()
 		.authenticated()
+//		.and()
+//		.httpBasic()
 		.and()
-		.httpBasic();
+		.formLogin();
 	}
 
 	@Override
