@@ -9,11 +9,14 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import com.sri.sec.jwt.JwtUsernameAndPasswordAuthFilter;
 
 import static com.sri.sec.security.ApplicationUserRole.*;
 
@@ -38,25 +41,28 @@ public class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 		.disable();
 		
 		http
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+		.and()
+		.addFilter(new JwtUsernameAndPasswordAuthFilter(authenticationManager()))
 		.authorizeRequests()
 		.antMatchers("/","index.html","/login","/css","/js/**").permitAll()
 		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
 		.anyRequest()
-		.authenticated()
-		.and()
-		.formLogin()
-		.loginPage("/login")
-		.defaultSuccessUrl("/courses")
-		.and()
-		.rememberMe() //default two weeks
-		
-		.and()
-		.logout()
-		.logoutUrl("/logout")
-		.clearAuthentication(true)
-		.invalidateHttpSession(true)
-		.deleteCookies("JSESSIONID","remember-me")
-		.logoutSuccessUrl("/login");
+		.authenticated();
+//		.and()
+//		.formLogin()
+//		.loginPage("/login")
+//		.defaultSuccessUrl("/courses")
+//		.and()
+//		.rememberMe() //default two weeks
+//		
+//		.and()
+//		.logout()
+//		.logoutUrl("/logout")
+//		.clearAuthentication(true)
+//		.invalidateHttpSession(true)
+//		.deleteCookies("JSESSIONID","remember-me")
+//		.logoutSuccessUrl("/login");
 	}
 
 	
