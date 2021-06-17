@@ -138,3 +138,31 @@ public class StudentManagementController {
 		.authenticated()
 		.and()
 		.formLogin();`
+		
+## Add logout 
+
+`
+		http
+		.authorizeRequests()
+		.antMatchers("/","index.html","/login","/css","/js/**").permitAll()
+		.antMatchers("/api/**").hasRole(ApplicationUserRole.STUDENT.name())
+		.anyRequest()
+		.authenticated()
+		.and()
+		.formLogin()
+		.loginPage("/login")
+		.defaultSuccessUrl("/courses")
+		.and()
+		.rememberMe() //default two weeks
+		
+		.and()
+		.logout()
+		.logoutUrl("/logout")
+		.clearAuthentication(true)
+		.invalidateHttpSession(true)
+		.deleteCookies("JSESSIONID","remember-me")
+		.logoutSuccessUrl("/login");
+
+`
+		
+		
